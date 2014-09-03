@@ -6,18 +6,20 @@
 // @updateURL   https://raw.githubusercontent.com/x007007007/greasmonkey-script/master/google/search_res_direct_link.version
 // @downloadURL https://raw.githubusercontent.com/x007007007/greasmonkey-script/master/google/search_res_direct_link.user.js
 // @include     https://www.google.com*
-// @version     0.0.1
+// @version     0.0.2
 // @grant       none
 // ==/UserScript==
 function replaceShowHref() {
   function addlink(href, cite) {
     if(href && cite){
-      let link = document.createElement('a'),
-          root = cite.parentElement || document.body;
-      link.href = href;
-      link.target = '_blank';
-      root.insertBefore(link, cite);
-      link.appendChild(cite);
+      let citeTitle=cite.firstChild,
+          link = document.createElement('a');
+      if(citeTitle.nodeName !== 'A'){
+        link.href = href;
+        link.target = '_blank';
+        link.innerHTML = '<b>OPEN</b>';
+        cite.insertBefore(link, citeTitle);
+      }
     }
   }
   var firstShowItem = document.querySelectorAll('#rso>li.g') .item(0) || null,
@@ -36,4 +38,16 @@ function replaceShowHref() {
     addlink(itemhref, itemcite);
   }
 }
-addEventListener('DOMContentLoaded', replaceShowHref, false);
+function init(){
+  var observer = new MutationObserver(function(records){
+    records.map(function (record){
+      if(record.target.id === 'search'){
+        replaceShowHref();
+      }
+    });
+  }), observerRoot=document.querySelector('#rcnt') ||document.body;
+  observer.observe(observerRoot,{ "childList": true, "subtree": true});
+  replaceShowHref();
+};
+
+addEventListener('DOMContentLoaded', init, false);
