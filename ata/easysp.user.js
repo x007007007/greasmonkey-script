@@ -6,7 +6,7 @@
 // @downloadURL https://raw.githubusercontent.com/x007007007/greasmonkey-script/master/ata/easysp.user.js
 // @include     http://sp.ata.net.cn/Admin/files/gdfy/AddMealsDetail.aspx*
 // @include     http://sp.ata.net.cn/Admin/files/nav/IndexNew2.aspx*
-// @version     0.0.2
+// @version     0.0.3
 // @grant       GM_xmlhttpRequest
 // @grant       GM_log
 // @grant       GM_setValue
@@ -108,17 +108,16 @@ var init = function () {
         } else if (s.indexOf('/Admin/files/grfy/Traffic3.aspx') >= 0  && doc) {
           /* 交通 */
           if (!doc.querySelector("#flag_traffic")){
-            if(doc.querySelector('#divtop table tr th')){
-              var flag=document.createElement('p');
-              flag.id = 'flag_traffic';
-              flag.innerHTML='协助中';
-              doc.querySelector('#divtop table tr th').appendChild(flag);
-              doc.querySelector('#DropDownListXM').value = '1117-61';
-              doc.querySelector('#DropDownListGJ').value = '出租车';
-              doc.querySelector('#txtCome').value = '公司';
-              doc.querySelector('#txtTo').value = '家';
-              doc.querySelector('#TextBoxDW').value = '无';
-              doc.querySelector('#TextBoxMD').value = "项目推进";
+            if(!doc.querySelector('#ddlAccount').value){
+                doc.querySelector('#DropDownListXM').value = '1117-61';
+                (doc.querySelector('#DropDownListXM').onchange ||function(){})();
+                doc.querySelector('#DropDownListGJ').value = '出租车';
+                doc.querySelector('#txtCome').value = '公司';
+                doc.querySelector('#txtTo').value = '家';
+                doc.querySelector('#TextBoxDW').value = '无';
+                doc.querySelector('#TextBoxMD').value = "项目推进";
+              
+             
             }
           }
           //console.log(doc);
