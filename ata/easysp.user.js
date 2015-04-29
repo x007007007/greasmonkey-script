@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name        ata 餐费明细
+// @name        ata OA 辅助系统
 // @namespace   ata
-// @description 计算总和
+// @description 受够了OA虐我千百遍，我待OA如初恋的感受，遂决定改造OA，如何改造呢，我非其父母，无法从源头改变，也只有靠插入了，本脚会将自生强势插入，因而有可能导致OA出大事，如果闹出人命。作者表示强烈的谴责与同情并强烈抗议
 // @updateURL   https://raw.githubusercontent.com/x007007007/greasmonkey-script/master/ata/easysp.version
 // @downloadURL https://raw.githubusercontent.com/x007007007/greasmonkey-script/master/ata/easysp.user.js
 // @include     http://sp.ata.net.cn/Admin/files/gdfy/AddMealsDetail.aspx*
 // @include     http://sp.ata.net.cn/Admin/files/nav/IndexNew2.aspx*
-// @version     0.0.1
+// @version     0.0.2
 // @grant       GM_xmlhttpRequest
 // @grant       GM_log
 // @grant       GM_setValue
@@ -107,17 +107,20 @@ var init = function () {
           }
         } else if (s.indexOf('/Admin/files/grfy/Traffic3.aspx') >= 0  && doc) {
           /* 交通 */
-//           var flogdom = doc.querySelector('#divTop table tbody tr').append();
-//           if (flogdom.innerHTML != '开启协助') {
-//             flogdom.innerHTML = '开启协助';
-//             doc.querySelector('#DropDownListXM').value = '1117-61';
-//             doc.querySelector('#DropDownListGJ').value = '出租车';
-//             doc.querySelector('#txtCome').value = '公司';
-//             doc.querySelector('#txtTo').value = '家';
-//             doc.querySelector('#TextBoxDW').value = '自己';
-//             doc.querySelector('#TextBoxMD').value = "项目推进";
-            
-//           }
+          if (!doc.querySelector("#flag_traffic")){
+            if(doc.querySelector('#divtop table tr th')){
+              var flag=document.createElement('p');
+              flag.id = 'flag_traffic';
+              flag.innerHTML='协助中';
+              doc.querySelector('#divtop table tr th').appendChild(flag);
+              doc.querySelector('#DropDownListXM').value = '1117-61';
+              doc.querySelector('#DropDownListGJ').value = '出租车';
+              doc.querySelector('#txtCome').value = '公司';
+              doc.querySelector('#txtTo').value = '家';
+              doc.querySelector('#TextBoxDW').value = '无';
+              doc.querySelector('#TextBoxMD').value = "项目推进";
+            }
+          }
           //console.log(doc);
         } else if (s.indexOf('/Ribao/RibaoLeaveManager.aspx') >= 0 && doc) {
           /* 考勤 */
